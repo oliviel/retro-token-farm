@@ -18,24 +18,27 @@ function App() {
   const [daiTokenContract, setDaiTokenContract] = useState({});
   const [tokenFarmContract, setTokenFarmContract] = useState({});
 
-  const [retroTokenBalance, setretroTokenBalance] = useState('0');  
-  const [daiTokenBalance, setdaiTokenBalance] = useState('0');
-  const [tokenFarmBalance, settokenFarmBalance] = useState('0');
+  const [balance, setBalance] = useState({
+    retroToken: '0',
+    daiToken: '0',
+    staking: '0',
+  });  
 
   useEffect(() => {
     (async () => {
-      setIsloading(true);
       await loadBlockchainData();
-      setIsloading(false);
     })();
   }, []);
 
 
   async function loadBlockchainData() {
     try {
+      setIsloading(true);
       const provider = new ethers.providers.Web3Provider(window.ethereum);
 
       const signer = provider.getSigner();
+
+      const accountAddress = await signer.getAddress();
 
       const retroToken = new ethers.Contract(
         retroTokenAddress.RetroToken, 
@@ -49,22 +52,19 @@ function App() {
         signer
       )
 
-
       const tokenFarm = new ethers.Contract(
         tokenFarmAddress.TokenFarm,
         TokenFarmContract.abi,
         signer
       )
 
-      const [selectedAddress] = await window.ethereum.enable();
-
-      console.log(await daiToken.name());
-
-      setUserAddress(selectedAddress);    
+      setUserAddress(accountAddress);    
       setRetroTokenContract(retroToken);
       setDaiTokenContract(daiToken);
       setTokenFarmContract(tokenFarm);
+      setIsloading(false);
     } catch (error) {
+      setIsloading(false);
       console.log(error)
     }
   }
@@ -85,24 +85,25 @@ function App() {
     await window.ethereum.enable();
   }
 
-  if (window.ethereum === undefined) {
-    return <NoWalletDetected />;
-  }
-
   function getRandomNumber(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  if (window.ethereum === undefined) {
+    return <NoWalletDetected />;
+  }
+
   if (isLoading) {
-    return <Loading loadingPercent={getRandomNumber(1, 100)} />
+    return <Loading loadingPercent={getRandomNumber(1, 100)} />;
   }
 
   if (!userAddress) {
     return <ConnectWallet connectWallet={triggerWallte} />;
   }
 
+ 
   return (
     <>
     <Header />
