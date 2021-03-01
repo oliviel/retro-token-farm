@@ -79,8 +79,9 @@ function App() {
     }
   }
 
-  async function stakeTokens() {
+  async function stakeTokens(event) {
     try {
+      event.preventDefault();
       setIsloading(true);
       const approve = await daiTokenContract.approve(tokenFarmContract.address, parseEther(amount));
 
@@ -97,9 +98,8 @@ function App() {
       if (response.status === 0) {
         throw new Error("Transaction failed");
       }
-
+      
       const daiBalance = await daiTokenContract.balanceOf(userAddress);
-
       const tokenFarmBalance = await tokenFarmContract.stakingBalance(userAddress);
 
       setBalance({ 
@@ -110,6 +110,32 @@ function App() {
       console.log('EROROR', error);
     } finally {
       setAmount('');
+      setIsloading(false);
+    }
+  }
+  
+  async function unstakeTokens(event) {
+    try {
+      event.preventDefault();
+      setIsloading(true);
+      const tx = await tokenFarmContract.unstakeTokens();
+      const receipt = await tx.wait();
+
+      if (receipt.status === 0) {
+        throw new Error("Transaction failed");
+      }
+
+      const daiBalance = await daiTokenContract.balanceOf(userAddress);
+      const tokenFarmBalance = await tokenFarmContract.stakingBalance(userAddress);
+
+      setBalance({ 
+        daiToken: daiBalance.toString(),
+        staking: tokenFarmBalance.toString(),
+      })
+
+    } catch (error) {
+      console.log('ERROR', error);
+    } finally {
       setIsloading(false);
     }
   }
@@ -176,7 +202,8 @@ function App() {
           <form onSubmit={stakeTokens}>
             <div className="nes-field text-black mt-5">
               <input 
-                type="text"
+                type="number"
+                min={1}
                 className="nes-input" 
                 placeholder="0" 
                 value={amount}
@@ -190,10 +217,10 @@ function App() {
                 <p>Stake</p>
               </div>
             </button>
-            <button className="nes-btn is-primary w-full mt-5"> 
+            <button onClick={unstakeTokens} className="nes-btn is-error w-full mt-5"> 
               <div className="flex justify-center pt-2">
                 <i className="nes-icon trophy transform scale-150"></i>
-                <p>test button</p>
+                <p>Unstake</p>
               </div>
             </button>
           </form>

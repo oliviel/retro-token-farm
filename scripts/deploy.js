@@ -29,9 +29,7 @@ async function main() {
   await retroToken.transfer(tokenFarm.address, '1000000000000000000000000');
   await daiToken.transfer(investorAddress, '200000000000000000000');
 
-
   console.log('The DAITOKEN ADDRESS', daiToken.address);
-
 
   saveFrontendFiles(retroToken, 'RetroToken');
   saveFrontendFiles(daiToken, 'DaiToken');
