@@ -16,7 +16,6 @@ async function main() {
   const DaiToken = await ethers.getContractFactory("DaiToken");
   const TokenFarm = await ethers.getContractFactory("TokenFarm");
 
-
   const retroToken = await RetroToken.deploy();
   const daiToken = await DaiToken.deploy();
 
