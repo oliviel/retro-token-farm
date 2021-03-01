@@ -2,7 +2,7 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/oliviel/Documents/oliviel_work/programming/blockchain/bananito/contracts/DaiToken.sol": {
-      "lastModificationDate": 1614121511096,
+      "lastModificationDate": 1614225757430,
       "contentHash": "7ff26a3d606cbc18ecbd18450cd3aade",
       "sourceName": "contracts/DaiToken.sol",
       "solcConfig": {
@@ -72,7 +72,7 @@
       ]
     },
     "/Users/oliviel/Documents/oliviel_work/programming/blockchain/bananito/contracts/TokenFarm.sol": {
-      "lastModificationDate": 1614032137844,
+      "lastModificationDate": 1614225757430,
       "contentHash": "25259c3d29783d85bdf063be5d2fbdbc",
       "sourceName": "contracts/TokenFarm.sol",
       "solcConfig": {
@@ -146,7 +146,7 @@
       ]
     },
     "/Users/oliviel/Documents/oliviel_work/programming/blockchain/bananito/contracts/RetroToken.sol": {
-      "lastModificationDate": 1614216967492,
+      "lastModificationDate": 1614226574339,
       "contentHash": "7127d664d71db3d92adac7ce25cae422",
       "sourceName": "contracts/RetroToken.sol",
       "solcConfig": {

@@ -1,5 +1,3 @@
-const hre = require("hardhat");
-
 async function main() {
   // We get the contract to deploy
   if (network.name === "hardhat") {
@@ -10,9 +8,14 @@ async function main() {
     );
   }
 
-  const RetroToken = await hre.ethers.getContractFactory("RetroToken");
-  const DaiToken = await hre.ethers.getContractFactory("DaiToken");
-  const TokenFarm = await hre.ethers.getContractFactory("TokenFarm");
+  const [deployer, investor] = await ethers.getSigners();
+
+  const investorAddress = await investor.getAddress();
+
+  const RetroToken = await ethers.getContractFactory("RetroToken");
+  const DaiToken = await ethers.getContractFactory("DaiToken");
+  const TokenFarm = await ethers.getContractFactory("TokenFarm");
+
 
   const retroToken = await RetroToken.deploy();
   const daiToken = await DaiToken.deploy();
@@ -22,6 +25,13 @@ async function main() {
 
   const tokenFarm = await TokenFarm.deploy(retroToken.address, daiToken.address);
   await tokenFarm.deployed();
+
+  await retroToken.transfer(tokenFarm.address, '1000000000000000000000000');
+  await daiToken.transfer(investorAddress, '200000000000000000000');
+
+
+  console.log('The DAITOKEN ADDRESS', daiToken.address);
+
 
   saveFrontendFiles(retroToken, 'RetroToken');
   saveFrontendFiles(daiToken, 'DaiToken');
