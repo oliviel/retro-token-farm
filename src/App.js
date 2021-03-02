@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
-import { NoWalletDetected, ConnectWallet, Header, Loading } from './components';
 import { ethers } from 'ethers';
-import { parseEther, formatEther } from './utils';
+import {
+  NoWalletDetected, 
+  ConnectWallet, 
+  Header, 
+  Loading, 
+  Container,
+  Form,
+  Balances
+} from './components';
+import { parseEther } from './utils';
 import RetroTokenContract from "./abis/RetroToken.json";
 import retroTokenAddress from "./abis/retrotoken-address.json";
 import DaiTokenContract from "./abis/DaiToken.json";
@@ -79,11 +87,14 @@ function App() {
     }
   }
 
-  async function stakeTokens(event) {
+  async function stakeTokens() {
     try {
-      event.preventDefault();
       setIsloading(true);
-      const approve = await daiTokenContract.approve(tokenFarmContract.address, parseEther(amount));
+      
+      const approve = await daiTokenContract.approve(
+        tokenFarmContract.address, 
+        parseEther(amount)
+      );
 
       const response = await approve.wait();
 
@@ -91,11 +102,7 @@ function App() {
 
       const receipt = await tx.wait();
 
-       if (receipt.status === 0) {
-        throw new Error("Transaction failed");
-      }
-
-      if (response.status === 0) {
+      if (receipt.status === 0 || response.status === 0) {
         throw new Error("Transaction failed");
       }
       
@@ -114,9 +121,8 @@ function App() {
     }
   }
   
-  async function unstakeTokens(event) {
+  async function unstakeTokens() {
     try {
-      event.preventDefault();
       setIsloading(true);
       const tx = await tokenFarmContract.unstakeTokens();
       const receipt = await tx.wait();
@@ -165,67 +171,21 @@ function App() {
   return (
     <>
       <Header />
-      <section className="max-w-screen-md mx-auto mt-5 text-white p-5">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="text-center nes-container is-rounded is-dark">
-            <p>Staking Balance</p>
-            <div className="flex mt-8 content-center ml-16">
-              <i className="nes-icon coin transform scale-150 mr-5"></i>
-              <p>
-              <span>{formatEther(balance.staking)}</span>
-              <span className="ml-2 nes-text is-warning">mDAI</span>
-              </p>
-            </div>
-          </div>
-          <div className="text-center nes-container is-rounded is-dark ">
-            <p>Reward Balance</p>
-            <div className="flex mt-8 ml-3 content-center">
-              <i className="nes-icon coin transform scale-150 mr-3	"></i>
-              <p> 
-                <span>{formatEther(balance.retroToken)}</span>
-                <span className="ml-2 nes-text is-warning">Retro Token</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="max-w-screen-md mx-auto mt-2 text-white p-5">
-        <div className="text-center nes-container is-rounded">
-          <div className="flex justify-between">
-            <p className="text-black text-sm md:text-base">Stake Tokens</p>
-            <p className="text-black text-sm md:text-base">
-              Walllet Balance: 
-              <span>{formatEther(balance.daiToken)}</span>
-            </p>
-          </div>
-          <form onSubmit={stakeTokens}>
-            <div className="nes-field text-black mt-5">
-              <input 
-                type="number"
-                min={1}
-                className="nes-input" 
-                placeholder="0" 
-                value={amount}
-                required
-                onChange={(e) => setAmount(e.target.value)}
-              />
-            </div>
-            <button className="nes-btn is-primary w-full mt-5"> 
-              <div className="flex justify-center pt-2">
-                <i className="nes-icon trophy transform scale-150"></i>
-                <p>Stake</p>
-              </div>
-            </button>
-            <button onClick={unstakeTokens} className="nes-btn is-error w-full mt-5"> 
-              <div className="flex justify-center pt-2">
-                <i className="nes-icon trophy transform scale-150"></i>
-                <p>Unstake</p>
-              </div>
-            </button>
-          </form>
-        </div>
-      </section>
+      <Container className="mt-5">
+        <Balances
+          stakingBalance={balance.staking}
+          retroTokenBalance={balance.retroToken}
+        />
+      </Container>
+      <Container>
+        <Form 
+          daitokenBalance={balance.daiToken} 
+          amount={amount}
+          handleAmount={setAmount}
+          stakeTokens={stakeTokens}
+          unstakeTokens={unstakeTokens}
+        />
+      </Container>
     </>
   )
 }
