@@ -2,10 +2,10 @@ import { formatEther } from '../utils';
 
 export const Form = ({ 
   daitokenBalance = '', 
-  stakeTokens, 
-  unstakeTokens,
+  stakeTokens = () => null, 
+  unstakeTokens = () => null,
   amount = '',
-  handleAmount
+  handleAmount = () => null
 }) => {
   return (
       <div className="text-center nes-container is-rounded">
