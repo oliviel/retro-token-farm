@@ -60,11 +60,10 @@ describe("TokenFarm", function() {
     it('Rewards investors for staking mDai tokens', async () => {
       let result;
 
-      // check invertor balance before stacking
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
         tokens('100').toString(), 
-        'Investor Mock DAI wallet balance correct before staking'
+        'The investor mock dai balance should be 100'
       );
       
       // Stake Mock DAI Tokens
@@ -75,25 +74,25 @@ describe("TokenFarm", function() {
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
         tokens('0').toString(), 
-        'Investor Mock DAI wallet balance correct after staking'
+        'The investor mock dai balance should be 0'
       );
 
       result = await daiToken.balanceOf(tokenFarm.address);
       expect(result.toString()).to.equal(
         tokens('100').toString(),
-        'Token Farm Mock DAI balance correct after staking'
+        'The token farm mock dai balance should be 100'
       );
 
       result = await tokenFarm.stakingBalance(investor.address);
       expect(result.toString()).to.equal(
         tokens('100').toString(),
-        'Investor staking balance correct after staking'
+        'The Investor staking balance should be 100'
       );
 
       result = await tokenFarm.isStaking(investor.address);
       expect(result.toString()).to.equal(
         'true',
-        'Investor staking status correct after staking'
+        'The investor staking status should be true'
       );
 
       // Issue tokens
@@ -103,7 +102,7 @@ describe("TokenFarm", function() {
       result = await retroToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
         tokens('100').toString(),
-        'investor Retro Token wallet balance correct affter issuance'
+        'The investor retro token balance should be 100'
       );
 
       // Ensure that only onwer can issue tokens
@@ -116,25 +115,25 @@ describe("TokenFarm", function() {
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
         tokens('100').toString(),
-        'Investor Mock DAI wallet balance correct after staking'
+        'The investor mock dai balance should be 100'
       );
 
       result = await daiToken.balanceOf(tokenFarm.address);
       expect(result.toString()).to.equal(
         tokens('0').toString(),
-        'Token Farm Mock DAI balance correct after staking'
+        'The token farm dai balance should be 0'
       );
 
       result = await tokenFarm.stakingBalance(investor.address);
       expect(result.toString()).to.equal(
         tokens('0').toString(),
-        'investor staking balance correct after staking'
+        'The investor staking balance should be 0'
       );
 
       result = await tokenFarm.isStaking(investor.address);
       expect(result.toString()).to.equal(
         'false',
-        'investor staking status correct after staking'
+        'The investor staking status should be false'
       );
     });
   });
