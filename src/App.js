@@ -109,10 +109,11 @@ function App() {
       const daiBalance = await daiTokenContract.balanceOf(userAddress);
       const tokenFarmBalance = await tokenFarmContract.stakingBalance(userAddress);
 
-      setBalance({ 
+      setBalance((prevBalance) => ({ 
+        ...prevBalance,
         daiToken: daiBalance.toString(),
         staking: tokenFarmBalance.toString(),
-      })
+      }));
     } catch (error) {
       console.log('EROROR', error);
     } finally {
@@ -134,11 +135,11 @@ function App() {
       const daiBalance = await daiTokenContract.balanceOf(userAddress);
       const tokenFarmBalance = await tokenFarmContract.stakingBalance(userAddress);
 
-      setBalance({ 
+      setBalance((prevBalance) => ({ 
+        ...prevBalance,
         daiToken: daiBalance.toString(),
         staking: tokenFarmBalance.toString(),
-      })
-
+      }));
     } catch (error) {
       console.log('ERROR', error);
     } finally {

@@ -1,8 +1,10 @@
-
 async function main() {
-  const TokenFarm = await ethers.getContractFactory("TokenFarm");
-  const tokenFarm = await TokenFarm.attach("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0");
-  await tokenFarm.issueTokens();
+  const tokenFarm = await ethers.getContractAt(
+    'TokenFarm', 
+    '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
+  );
+  const tx = await tokenFarm.issueTokens();
+  await tx.wait();
   console.log('tokens issued');
 }
 
