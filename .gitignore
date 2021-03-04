@@ -11,7 +11,7 @@
 # contracts
 /artifacts
 /cache
-/abis
+**/abis
 
 # production
 /build
