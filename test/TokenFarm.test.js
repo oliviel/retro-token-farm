@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-function tokens(n) {
+function parseEther(n) {
   return ethers.utils.parseEther(n);
 }
 
@@ -29,8 +29,8 @@ describe("TokenFarm", function() {
     tokenFarm = await TokenFarm.deploy(retroToken.address, daiToken.address);
     await tokenFarm.deployed();
 
-    await retroToken.transfer(tokenFarm.address, tokens('1000000').toString());
-    await daiToken.transfer(investor.address, tokens('100').toString(), { from: owner.address });
+    await retroToken.transfer(tokenFarm.address, parseEther('1000000').toString());
+    await daiToken.transfer(investor.address, parseEther('100').toString(), { from: owner.address });
   }); 
 
   describe('RetroToken deployment', async function() {
@@ -52,7 +52,7 @@ describe("TokenFarm", function() {
 
     it('Contract has tokens', async () => {
       const balance = await retroToken.balanceOf(tokenFarm.address);
-      expect(balance.toString()).to.equal(tokens('1000000').toString());
+      expect(balance.toString()).to.equal(parseEther('1000000').toString());
     });
   });
 
@@ -62,30 +62,30 @@ describe("TokenFarm", function() {
 
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
-        tokens('100').toString(), 
+        parseEther('100').toString(), 
         'The investor mock dai balance should be 100'
       );
       
       // Stake Mock DAI Tokens
-      await daiToken.connect(investor).approve(tokenFarm.address, tokens('100'));
-      await tokenFarm.connect(investor).stakeTokens(tokens('100'));
+      await daiToken.connect(investor).approve(tokenFarm.address, parseEther('100'));
+      await tokenFarm.connect(investor).stakeTokens(parseEther('100'));
 
       // Check staking result
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
-        tokens('0').toString(), 
+        parseEther('0').toString(), 
         'The investor mock dai balance should be 0'
       );
 
       result = await daiToken.balanceOf(tokenFarm.address);
       expect(result.toString()).to.equal(
-        tokens('100').toString(),
+        parseEther('100').toString(),
         'The token farm mock dai balance should be 100'
       );
 
       result = await tokenFarm.stakingBalance(investor.address);
       expect(result.toString()).to.equal(
-        tokens('100').toString(),
+        parseEther('100').toString(),
         'The Investor staking balance should be 100'
       );
 
@@ -101,7 +101,7 @@ describe("TokenFarm", function() {
       // Check balances after issuance
       result = await retroToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
-        tokens('100').toString(),
+        parseEther('100').toString(),
         'The investor retro token balance should be 100'
       );
 
@@ -114,19 +114,19 @@ describe("TokenFarm", function() {
       // Check results after unstaking
       result = await daiToken.balanceOf(investor.address);
       expect(result.toString()).to.equal(
-        tokens('100').toString(),
+        parseEther('100').toString(),
         'The investor mock dai balance should be 100'
       );
 
       result = await daiToken.balanceOf(tokenFarm.address);
       expect(result.toString()).to.equal(
-        tokens('0').toString(),
+        parseEther('0').toString(),
         'The token farm dai balance should be 0'
       );
 
       result = await tokenFarm.stakingBalance(investor.address);
       expect(result.toString()).to.equal(
-        tokens('0').toString(),
+        parseEther('0').toString(),
         'The investor staking balance should be 0'
       );
 
