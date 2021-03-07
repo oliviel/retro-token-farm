@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 async function main() {
   // We get the contract to deploy
   if (network.name === "hardhat") {
@@ -7,10 +9,6 @@ async function main() {
         " option '--network localhost'"
     );
   }
-
-  const [deployer, investor] = await ethers.getSigners();
-
-  const investorAddress = await investor.getAddress();
 
   const RetroToken = await ethers.getContractFactory("RetroToken");
   const DaiToken = await ethers.getContractFactory("DaiToken");
@@ -26,7 +24,7 @@ async function main() {
   await tokenFarm.deployed();
 
   await retroToken.transfer(tokenFarm.address, '1000000000000000000000000');
-  await daiToken.transfer(investorAddress, '200000000000000000000');
+  await daiToken.transfer(process.env.WALLET_ADDRESS, '200000000000000000000');
 
   console.log('The DAITOKEN ADDRESS', daiToken.address);
 
