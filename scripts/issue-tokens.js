@@ -1,9 +1,16 @@
 async function main() {
-  const tokenFarm = await ethers.getContractAt(
-    'TokenFarm', 
-    // replace this with your contract address
-    '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0'
-  );
+  const fs = require('fs');
+  const addressDir = __dirname + '/../src/abis/tokenfarm-address.json';
+
+  if (!fs.existsSync(addressDir)) {
+    throw new Error('Token Farm address is required, run the deploy script first');
+  }
+
+  const data = fs.readFileSync(addressDir, 'utf8');
+
+  const address = JSON.parse(data);
+
+  const tokenFarm = await ethers.getContractAt('TokenFarm', address.TokenFarm);
   const tx = await tokenFarm.issueTokens();
   await tx.wait();
   console.log('tokens issued');
