@@ -1,7 +1,7 @@
 import { formatEther } from '../utils';
 
 export const Form = ({ 
-  daitokenBalance = '', 
+  daitokenBalance = '0', 
   stakeTokens = () => null, 
   unstakeTokens = () => null,
   amount = '',

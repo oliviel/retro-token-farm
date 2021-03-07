@@ -1,4 +1,4 @@
-export const ConnectWallet = ({ connectWallet, networkError, dismiss }) => {
+export const ConnectWallet = ({ connectWallet = () => null }) => {
   return (
     <div className="max-w-screen-md mx-auto mt-20 text-white p-5">
       <div className="col-6 p-4 text-black text-center">

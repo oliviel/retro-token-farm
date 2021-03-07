@@ -10,12 +10,12 @@ import {
   Balances
 } from './components';
 import { parseEther } from './utils';
-import RetroTokenContract from "./abis/RetroToken.json";
-import retroTokenAddress from "./abis/retrotoken-address.json";
-import DaiTokenContract from "./abis/DaiToken.json";
-import daiTokenAddress from "./abis/daitoken-address.json";
-import TokenFarmContract from "./abis/TokenFarm.json";
-import tokenFarmAddress from "./abis/tokenfarm-address.json";
+import RetroTokenContract from './abis/RetroToken.json';
+import retroTokenAddress from './abis/retrotoken-address.json';
+import DaiTokenContract from './abis/DaiToken.json';
+import daiTokenAddress from './abis/daitoken-address.json';
+import TokenFarmContract from './abis/TokenFarm.json';
+import tokenFarmAddress from './abis/tokenfarm-address.json';
 
 function App() {
   const [userAddress, setUserAddress] = useState('');
@@ -33,14 +33,16 @@ function App() {
   });  
 
   useEffect(() => {
-    (async () => {
-      await loadBlockchainData();
-    })();
+    async function fetchData() {
+      await loadBlockchainData(); 
+    }
+    fetchData();
   }, []);
 
   async function loadBlockchainData() {    
     try {
       setIsloading(true);
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
 
       const signer = provider.getSigner();
@@ -147,7 +149,7 @@ function App() {
     }
   }
 
-  async function triggerWallte() {
+  async function triggerWallet() {
     await window.ethereum.enable();
   }
 
@@ -166,7 +168,7 @@ function App() {
   }
 
   if (!userAddress) {
-    return <ConnectWallet connectWallet={triggerWallte} />;
+    return <ConnectWallet connectWallet={triggerWallet} />;
   }
  
   return (
